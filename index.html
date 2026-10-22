@@ -17,6 +17,9 @@
 <meta name="twitter:title" content="Forever Class Codex">
 <meta name="twitter:image" content="https://tuckerscottalleborn.github.io/forever-class-codex/og.png">
 <meta name="theme-color" content="#c9a046">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="canonical" href="https://tuckerscottalleborn.github.io/forever-class-codex/">
 <title>Forever Class Codex</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -43,6 +46,7 @@ img{max-width:100%}
   --line-soft: color-mix(in oklab, #c9a046 16%, transparent);
   --alliance: #3a6cd0;
   --ink-mix: 100%;
+  --ink-mix-priest: 100%;
   --ink-base: #ece2c8;
   /* in-game tooltip: identical in both themes, it is an object from the game */
   --tt-bg: #070a22;
@@ -70,14 +74,14 @@ img{max-width:100%}
     --bg: #e8dab9; --panel: #f2e7cd; --panel-2: #e0cea6; --ink: #2a1d0e; --muted: #6a573b;
     --gold: #8a5a12; --gold-hi: #7a4500; --line: color-mix(in oklab, #8a5a12 40%, transparent);
     --line-soft: color-mix(in oklab, #8a5a12 18%, transparent); --alliance: #1f478f;
-    --ink-mix: 42%; --ink-base: #1c1206; color-scheme: light;
+    --ink-mix: 42%; --ink-mix-priest: 8%; --ink-base: #1c1206; color-scheme: light;
   }
 }
 :root[data-theme="light"] {
   --bg: #e8dab9; --panel: #f2e7cd; --panel-2: #e0cea6; --ink: #2a1d0e; --muted: #6a573b;
   --gold: #8a5a12; --gold-hi: #7a4500; --line: color-mix(in oklab, #8a5a12 40%, transparent);
   --line-soft: color-mix(in oklab, #8a5a12 18%, transparent); --alliance: #1f478f;
-  --ink-mix: 42%; --ink-base: #1c1206; color-scheme: light;
+  --ink-mix: 42%; --ink-mix-priest: 8%; --ink-base: #1c1206; color-scheme: light;
 }
 
 /* official class colours */
@@ -92,6 +96,7 @@ img{max-width:100%}
 .c-druid   { --cc: #FF7C0A }
 [class*="c-"] { --cc-ink: color-mix(in oklab, var(--cc) var(--ink-mix), var(--ink-base)) }
 .c-shaman { --cc-ink: color-mix(in oklab, #3d95ff var(--ink-mix), var(--ink-base)) }
+.c-priest { --cc-ink: color-mix(in oklab, #fff var(--ink-mix-priest), var(--ink-base)) }
 
 * { box-sizing: border-box }
 html { scroll-behavior: smooth; scroll-padding-top: 5.5rem }
@@ -168,6 +173,8 @@ a { color: inherit }
 @media (max-width: 30rem) {
   .m-row, .m-scale { grid-template-columns: 4.6rem minmax(0, 1fr) }
   .m-row .lv, .m-scale > span:last-child { display: none }
+  .m-scale { font-size: .68rem; letter-spacing: .02em }
+  .m-scale span span { white-space: nowrap }
 }
 
 /* ---------- action bar ---------- */
@@ -181,7 +188,11 @@ a { color: inherit }
 .bar-in { max-width: 74rem; margin-inline: auto; display: flex; gap: .35rem; align-items: center; overflow-x: auto; scrollbar-width: none }
 .bar-in::-webkit-scrollbar { display: none }
 .bar-lbl { font-family: var(--f-label); font-size: .8rem; color: var(--muted); margin-right: .5rem; white-space: nowrap; letter-spacing: .06em }
-@media (max-width: 40rem) { .bar-lbl { display: none } }
+@media (max-width: 40rem) {
+  .bar-lbl { display: none }
+  .bar-in { gap: 4px; justify-content: space-between }
+  .bar .slot { width: min(2.6rem, calc((100vw - 32px - 32px) / 9)); height: auto; aspect-ratio: 1 }
+}
 .slot {
   flex: 0 0 auto; width: 2.6rem; height: 2.6rem; position: relative; display: grid; place-items: center;
   border: 1px solid #000; border-radius: 3px; color: var(--cc);
