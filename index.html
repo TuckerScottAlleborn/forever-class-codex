@@ -308,6 +308,74 @@ a { color: inherit }
 .verdict p.big { font-family: var(--f-display); font-size: var(--step-2); line-height: 1.3; color: var(--gold-hi); max-width: 34ch }
 .verdict p { max-width: 66ch }
 footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--line-soft); font-family: var(--f-ui); font-size: var(--step--1); color: var(--muted); display: grid; gap: .5rem; max-width: 70ch }
+
+/* ---------- podcast ---------- */
+:root {
+  /* the red game button: an in-game object, identical in both themes */
+  --btn-top: #b3241a; --btn-bot: #5e0b06; --btn-text: #ffd100; --btn-edge: #d9a441;
+}
+.i-pause { display: none }
+.is-playing .i-play { display: none }
+.is-playing .i-pause { display: inline }
+.listen-hero { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem 1rem; margin-top: .25rem }
+.wow-btn {
+  display: inline-flex; align-items: center; gap: .55rem; cursor: pointer;
+  font-family: var(--f-display); font-size: 1.05rem; letter-spacing: .03em; color: var(--btn-text);
+  padding: .6rem 1.2rem .6rem 1rem; border: 1px solid #000; border-radius: 4px;
+  background: linear-gradient(180deg, var(--btn-top), var(--btn-bot));
+  box-shadow: inset 0 0 0 1px var(--btn-edge), inset 0 2px 0 rgba(255,255,255,.22), 0 2px 0 #000;
+  text-shadow: 0 1px 0 #000;
+}
+.wow-btn:hover { filter: brightness(1.15) }
+.wow-btn:active { transform: translateY(1px) }
+.wow-btn svg { width: 1.05rem; height: 1.05rem; fill: currentColor }
+.listen-meta { font-family: var(--f-ui); font-size: var(--step--1); color: var(--muted) }
+.listen {
+  justify-self: start; display: inline-flex; align-items: center; gap: .5rem; cursor: pointer;
+  font-family: var(--f-ui); font-size: .92rem; font-weight: 500; color: var(--ink);
+  padding: .4rem .8rem .4rem .45rem; border-radius: 999px;
+  border: 1px solid var(--line); background: var(--panel);
+}
+.listen:hover { border-color: var(--gold) }
+.listen .ico { width: 1.6rem; height: 1.6rem; border-radius: 50%; display: grid; place-items: center; background: var(--panel-2); border: 1px solid var(--line) }
+.listen svg { width: .8rem; height: .8rem; fill: var(--cc-ink, var(--gold-hi)) }
+.listen .dur { color: var(--muted); font-variant-numeric: tabular-nums }
+.listen.is-playing { border-color: var(--gold-hi); box-shadow: 0 0 0 1px var(--gold-hi) }
+.sec-head .listen { margin-top: .4rem }
+
+.player {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 20;
+  padding: .6rem 16px calc(.6rem + env(safe-area-inset-bottom, 0px));
+  background: color-mix(in oklab, var(--bg) 92%, transparent);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  border-top: 1px solid var(--line); box-shadow: 0 -8px 24px -12px #000;
+}
+.player-in { max-width: 74rem; margin-inline: auto; display: grid; grid-template-columns: auto auto auto minmax(0, 1fr) auto; gap: .5rem; align-items: center }
+.pl-btn {
+  width: 2.5rem; height: 2.5rem; display: grid; place-items: center; cursor: pointer; padding: 0;
+  border: 1px solid #000; border-radius: 3px; color: var(--btn-text);
+  background: radial-gradient(circle at 35% 30%, #2a3348, #07090e 85%);
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--btn-edge) 60%, transparent);
+}
+.pl-btn:hover { box-shadow: inset 0 0 0 1px var(--btn-text) }
+.pl-btn svg { width: 1.1rem; height: 1.1rem; fill: currentColor }
+.pl-btn.main { width: 2.9rem; height: 2.9rem }
+.pl-btn.main svg { width: 1.3rem; height: 1.3rem }
+.pl-info { min-width: 0; display: grid; gap: .15rem }
+.pl-title { font-family: var(--f-display); color: var(--gold-hi); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 1rem }
+.pl-title span { font-family: var(--f-ui); color: var(--muted); font-size: .8rem; margin-left: .4rem }
+.pl-track { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .6rem; align-items: center }
+.pl-track input { width: 100%; min-width: 0; margin: 0; accent-color: var(--gold-hi) }
+.pl-time { font-family: var(--f-ui); font-size: .8rem; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap }
+.pl-close { background: none; border: 0; color: var(--muted); font-size: 1.5rem; line-height: 1; cursor: pointer; padding: .25rem .4rem }
+.pl-close:hover { color: var(--ink) }
+body.player-open { padding-bottom: 6rem }
+@media (max-width: 30rem) {
+  .player-in { gap: .35rem }
+  .pl-btn { width: 2.2rem; height: 2.2rem }
+  .pl-btn.main { width: 2.6rem; height: 2.6rem }
+  .pl-time { font-size: .72rem }
+}
 </style>
 </head>
 <body>
@@ -332,6 +400,10 @@ footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--line
     <p class="label">world of warcraft: forever · alliance classes, read against vanilla</p>
     <h1>Forever Class Codex</h1>
     <p class="thesis">A Classic skeleton with more complete specs and less mandatory jank.</p>
+    <div class="listen-hero" data-pod>
+      <button type="button" class="wow-btn" id="play-all"><svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12.5-7.5z"/></svg><svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 4.5h4v15h-4zM13.5 4.5h4v15h-4z"/></svg><span class="lbl">Listen to the episode</span></button>
+      <p class="listen-meta"><span id="pod-len">About 40 minutes</span>, narrated, with a chapter for each class</p>
+    </div>
   </div>
   <div class="hero-grid">
     <div class="hero-copy frame">
@@ -391,6 +463,7 @@ footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--line
     <p class="label">read this first</p>
     <h2 id="sys-h">System changes that touch every class</h2>
     <p>These change how every class feels before you look at a single talent.</p>
+    <button type="button" class="listen" data-ch="systems" data-pod><span class="ico"><svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12.5-7.5z"/></svg><svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 4.5h4v15h-4zM13.5 4.5h4v15h-4z"/></svg></span><span class="lbl">Listen to this chapter</span><span class="dur"></span></button>
   </div>
   <div class="sys-grid">
     <article class="sys frame">
@@ -426,6 +499,7 @@ footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--line
   <aside class="cls-aside">
     <div class="crest"><span class="slot c-warrior"><svg><use href="#i-warrior"/></svg><kbd>1</kbd></span><div><h2 id="warrior-h">Warrior</h2><p class="tag">Arms · Fury · Protection</p></div></div>
     <div class="dist"><span class="xp"><i class="on"></i><i class="half"></i><i></i><i></i></span><p><span>Distance from Vanilla</span><b>Low–moderate</b></p></div>
+    <button type="button" class="listen" data-ch="warrior" data-pod><span class="ico"><svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12.5-7.5z"/></svg><svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 4.5h4v15h-4zM13.5 4.5h4v15h-4z"/></svg></span><span class="lbl">Listen to the Warrior chapter</span><span class="dur"></span></button>
     <div class="read frame"><p class="label">verdict</p><p>Choose Warrior when you specifically don't want Forever to feel like another expansion's class design. You still manage rage, stances, weapon swings and threat. Forever mostly removes the places where Vanilla Warrior fought its own mechanics.</p></div>
     <div class="tt" role="group" aria-label="Late-beta changes">
       <p class="tt-h">Late-beta ledger</p><p class="tt-sub">Warrior</p>
@@ -471,6 +545,7 @@ footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--line
   <aside class="cls-aside">
     <div class="crest"><span class="slot c-paladin"><svg><use href="#i-paladin"/></svg><kbd>2</kbd></span><div><h2 id="paladin-h">Paladin</h2><p class="tag">Holy · Protection · Retribution</p></div></div>
     <div class="dist"><span class="xp"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span><p><span>Distance from Vanilla</span><b>Very high</b></p></div>
+    <button type="button" class="listen" data-ch="paladin" data-pod><span class="ico"><svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12.5-7.5z"/></svg><svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 4.5h4v15h-4zM13.5 4.5h4v15h-4z"/></svg></span><span class="lbl">Listen to the Paladin chapter</span><span class="dur"></span></button>
     <div class="read frame"><p class="label">verdict</p><p>If you liked the idea of Vanilla Paladin but not what happened when you tanked or played Ret at 60, this is the clearest "play it again, it's different" pick. It is still slow, mana-hungry, seal-and-judgment Paladin, but all three specs finally have enough to work with.</p></div>
     <div class="tt" role="group" aria-label="Late-beta changes">
       <p class="tt-h">Late-beta ledger</p><p class="tt-sub">Paladin</p>
@@ -526,6 +601,7 @@ footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--line
   <aside class="cls-aside">
     <div class="crest"><span class="slot c-hunter"><svg><use href="#i-hunter"/></svg><kbd>3</kbd></span><div><h2 id="hunter-h">Hunter</h2><p class="tag">Beast Mastery · Marksmanship · Survival</p></div></div>
     <div class="dist"><span class="xp"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span><p><span>Distance from Vanilla</span><b>High</b></p></div>
+    <button type="button" class="listen" data-ch="hunter" data-pod><span class="ico"><svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12.5-7.5z"/></svg><svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 4.5h4v15h-4zM13.5 4.5h4v15h-4z"/></svg></span><span class="lbl">Listen to the Hunter chapter</span><span class="dur"></span></button>
     <div class="read frame"><p class="label">verdict</p><p>A Hunter that still follows old-school Hunter rules but has three genuinely different fantasies. Compared with Vanilla, Survival is close to a new spec.</p></div>
     <div class="tt" role="group" aria-label="Late-beta changes">
       <p class="tt-h">Late-beta ledger</p><p class="tt-sub">Hunter</p>
@@ -575,6 +651,7 @@ footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--line
   <aside class="cls-aside">
     <div class="crest"><span class="slot c-rogue"><svg><use href="#i-rogue"/></svg><kbd>4</kbd></span><div><h2 id="rogue-h">Rogue</h2><p class="tag">Assassination · Combat · Subtlety</p></div></div>
     <div class="dist"><span class="xp"><i class="on"></i><i class="on"></i><i></i><i></i></span><p><span>Distance from Vanilla</span><b>Moderate</b></p></div>
+    <button type="button" class="listen" data-ch="rogue" data-pod><span class="ico"><svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12.5-7.5z"/></svg><svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 4.5h4v15h-4zM13.5 4.5h4v15h-4z"/></svg></span><span class="lbl">Listen to the Rogue chapter</span><span class="dur"></span></button>
     <div class="read frame"><p class="label">verdict</p><p>For someone who already likes Classic Rogue and wants better-defined trees. It is not the class to choose if you want something radically new.</p></div>
     <div class="tt" role="group" aria-label="Late-beta changes">
       <p class="tt-h">Late-beta ledger</p><p class="tt-sub">Rogue</p>
@@ -619,6 +696,7 @@ footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--line
   <aside class="cls-aside">
     <div class="crest"><span class="slot c-priest"><svg><use href="#i-priest"/></svg><kbd>5</kbd></span><div><h2 id="priest-h">Priest</h2><p class="tag">Discipline · Holy · Shadow</p></div></div>
     <div class="dist"><span class="xp"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span><p><span>Distance from Vanilla</span><b>High</b></p></div>
+    <button type="button" class="listen" data-ch="priest" data-pod><span class="ico"><svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12.5-7.5z"/></svg><svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 4.5h4v15h-4zM13.5 4.5h4v15h-4z"/></svg></span><span class="lbl">Listen to the Priest chapter</span><span class="dur"></span></button>
     <div class="read frame"><p class="label">verdict</p><p>Pick Priest if you want to stay recognizably Classic but feel that your spec matters every time you play. Disc is the spec you will most need to relearn.</p></div>
     <div class="tt" role="group" aria-label="Late-beta changes">
       <p class="tt-h">Late-beta ledger</p><p class="tt-sub">Priest</p>
@@ -669,6 +747,7 @@ footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--line
   <aside class="cls-aside">
     <div class="crest"><span class="slot c-shaman"><svg><use href="#i-shaman"/></svg><kbd>6</kbd></span><div><h2 id="shaman-h">Shaman</h2><p class="tag">Elemental · Enhancement · Restoration</p></div></div>
     <div class="dist"><span class="xp"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span><p><span>Distance from Vanilla</span><b>Very high</b></p></div>
+    <button type="button" class="listen" data-ch="shaman" data-pod><span class="ico"><svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12.5-7.5z"/></svg><svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 4.5h4v15h-4zM13.5 4.5h4v15h-4z"/></svg></span><span class="lbl">Listen to the Shaman chapter</span><span class="dur"></span></button>
     <div class="read frame"><p class="label">verdict</p><p>For an Alliance veteran who wants something that still feels like old WoW but couldn't be played on Alliance before, Dwarf Shaman belongs high on the shortlist. You still place totems and think about them. You just stop spending half your globals rebuilding the same four.</p></div>
     <div class="tt" role="group" aria-label="Late-beta changes">
       <p class="tt-h">Late-beta ledger</p><p class="tt-sub">Shaman</p>
@@ -721,6 +800,7 @@ footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--line
   <aside class="cls-aside">
     <div class="crest"><span class="slot c-mage"><svg><use href="#i-mage"/></svg><kbd>7</kbd></span><div><h2 id="mage-h">Mage</h2><p class="tag">Arcane · Fire · Frost</p></div></div>
     <div class="dist"><span class="xp"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span><p><span>Distance from Vanilla</span><b>High</b></p></div>
+    <button type="button" class="listen" data-ch="mage" data-pod><span class="ico"><svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12.5-7.5z"/></svg><svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 4.5h4v15h-4zM13.5 4.5h4v15h-4z"/></svg></span><span class="lbl">Listen to the Mage chapter</span><span class="dur"></span></button>
     <div class="read frame"><p class="label">verdict</p><p>A strong pick if your Vanilla complaint was that the toolkit is great but raiding becomes one button. Forever's answer isn't Retail Mage. It's Classic Mage with an engine for each spec. Arcane in particular is a newly legitimate spec.</p></div>
     <div class="tt" role="group" aria-label="Late-beta changes">
       <p class="tt-h">Late-beta ledger</p><p class="tt-sub">Mage</p>
@@ -774,6 +854,7 @@ footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--line
   <aside class="cls-aside">
     <div class="crest"><span class="slot c-warlock"><svg><use href="#i-warlock"/></svg><kbd>8</kbd></span><div><h2 id="warlock-h">Warlock</h2><p class="tag">Affliction · Demonology · Destruction</p></div></div>
     <div class="dist"><span class="xp"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span><p><span>Distance from Vanilla</span><b>High</b></p></div>
+    <button type="button" class="listen" data-ch="warlock" data-pod><span class="ico"><svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12.5-7.5z"/></svg><svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 4.5h4v15h-4zM13.5 4.5h4v15h-4z"/></svg></span><span class="lbl">Listen to the Warlock chapter</span><span class="dur"></span></button>
     <div class="read frame"><p class="label">verdict</p><p>Fewer headline fixes than Paladin or Druid, because Vanilla Warlock already worked, but the specs are much better defined. If you love the Classic Warlock toolbox but dislike how optimal PvE builds blur the trees together, this is a big improvement.</p></div>
     <div class="tt" role="group" aria-label="Late-beta changes">
       <p class="tt-h">Late-beta ledger</p><p class="tt-sub">Warlock</p>
@@ -818,6 +899,7 @@ footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--line
   <aside class="cls-aside">
     <div class="crest"><span class="slot c-druid"><svg><use href="#i-druid"/></svg><kbd>9</kbd></span><div><h2 id="druid-h">Druid</h2><p class="tag">Balance · Feral · Restoration</p></div></div>
     <div class="dist"><span class="xp"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span><p><span>Distance from Vanilla</span><b>Very high</b></p></div>
+    <button type="button" class="listen" data-ch="druid" data-pod><span class="ico"><svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12.5-7.5z"/></svg><svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 4.5h4v15h-4zM13.5 4.5h4v15h-4z"/></svg></span><span class="lbl">Listen to the Druid chapter</span><span class="dur"></span></button>
     <div class="read frame"><p class="label">verdict</p><p>If you know Classic deeply, you will notice the changes constantly. Weapon upgrades matter in forms, powershifting is formalized, Bear has better threat tools, Balance has a spell cycle and Resto gets core healing tools. It is still Vanilla Druid, minus a remarkable number of its structural oddities.</p></div>
     <div class="tt" role="group" aria-label="Late-beta changes">
       <p class="tt-h">Late-beta ledger</p><p class="tt-sub">Druid</p>
@@ -867,6 +949,7 @@ footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--line
     <p class="label">for the veteran</p>
     <h2 id="choose-h">Choose your path</h2>
     <p>You know what a Warrior is. The useful question is which familiar class gives you an interesting Forever experience.</p>
+    <button type="button" class="listen" data-ch="choose" data-pod><span class="ico"><svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12.5-7.5z"/></svg><svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 4.5h4v15h-4zM13.5 4.5h4v15h-4z"/></svg></span><span class="lbl">Listen to this chapter</span><span class="dur"></span></button>
   </div>
   <div class="paths">
     <article class="path frame">
@@ -939,6 +1022,21 @@ footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--line
 </footer>
 </main>
 
+<div class="player" id="player" hidden>
+  <div class="player-in">
+    <button type="button" class="pl-btn" id="pl-prev" aria-label="Previous chapter"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5h2.5v14H6zM20 5v14L9.5 12z"/></svg></button>
+    <button type="button" class="pl-btn main" id="pl-toggle" aria-label="Play"><svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l12.5-7.5z"/></svg><svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 4.5h4v15h-4zM13.5 4.5h4v15h-4z"/></svg></button>
+    <button type="button" class="pl-btn" id="pl-next" aria-label="Next chapter"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.5 5H18v14h-2.5zM4 5v14l10.5-7z"/></svg></button>
+    <div class="pl-info">
+      <p class="pl-title" id="pl-title">Introduction</p>
+      <div class="pl-track"><input type="range" id="pl-seek" min="0" max="1000" step="1" value="0" aria-label="Position in episode"><span class="pl-time" id="pl-time">0:00</span></div>
+    </div>
+    <button type="button" class="pl-close" id="pl-close" aria-label="Close player">&times;</button>
+  </div>
+  <audio id="pod" preload="none"></audio>
+</div>
+<script type="application/json" id="podcast-data">{"src": "audio/forever-class-codex.mp3", "duration": 2303.63, "chapters": [{"id": "intro", "title": "Introduction", "start": 0.5, "end": 107.24}, {"id": "systems", "title": "System changes", "start": 109.68, "end": 292.75}, {"id": "warrior", "title": "Warrior", "start": 295.19, "end": 494.34}, {"id": "paladin", "title": "Paladin", "start": 496.78, "end": 740.06}, {"id": "hunter", "title": "Hunter", "start": 742.5, "end": 945.06}, {"id": "rogue", "title": "Rogue", "start": 947.5, "end": 1097.84}, {"id": "priest", "title": "Priest", "start": 1100.28, "end": 1304.05}, {"id": "shaman", "title": "Shaman", "start": 1306.49, "end": 1523.66}, {"id": "mage", "title": "Mage", "start": 1526.1, "end": 1736.53}, {"id": "warlock", "title": "Warlock", "start": 1738.97, "end": 1898.87}, {"id": "druid", "title": "Druid", "start": 1901.31, "end": 2115.59}, {"id": "choose", "title": "Choosing your class", "start": 2118.03, "end": 2258.7}, {"id": "closing", "title": "Closing", "start": 2261.14, "end": 2302.83}]}</script>
+
 <script>
 (function () {
   // launch countdown
@@ -979,6 +1077,137 @@ footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--line
       });
     }, { rootMargin: "-40% 0px -55% 0px" });
     document.querySelectorAll("section.cls").forEach(function (s) { io.observe(s); });
+  }
+})();
+</script>
+<script>
+// podcast player: one MP3, chapters from #podcast-data (written by podcast/build.py)
+(function () {
+  var data;
+  try { data = JSON.parse(document.getElementById("podcast-data").textContent); } catch (e) { data = {}; }
+  var pods = document.querySelectorAll("[data-pod]");
+  if (!data || !data.chapters || !data.chapters.length) { pods.forEach(function (el) { el.hidden = true; }); return; }
+
+  var ch = data.chapters, audio = document.getElementById("pod"), player = document.getElementById("player");
+  var $ = function (id) { return document.getElementById(id); };
+  var seek = $("pl-seek"), title = $("pl-title"), time = $("pl-time"), toggle = $("pl-toggle"), all = $("play-all");
+  var stopAt = null, scrubbing = false;
+  var fmt = function (s) { s = Math.max(0, Math.round(s)); var m = Math.floor(s / 60); return m + ":" + String(s % 60).padStart(2, "0"); };
+  var idxOf = function (id) { for (var i = 0; i < ch.length; i++) if (ch[i].id === id) return i; return -1; };
+  var at = function (t) { for (var i = ch.length - 1; i >= 0; i--) if (t >= ch[i].start - 0.05) return i; return 0; };
+
+  $("pod-len").textContent = Math.round(data.duration / 60) + " minutes";
+  document.querySelectorAll(".listen[data-ch]").forEach(function (b) {
+    var c = ch[idxOf(b.dataset.ch)];
+    if (!c) { b.hidden = true; return; }
+    b.querySelector(".dur").textContent = fmt(c.end - c.start);
+    b.dataset.label = b.querySelector(".lbl").textContent;
+    b.addEventListener("click", function () { playChapter(b.dataset.ch); });
+  });
+
+  function open() {
+    if (!audio.getAttribute("src")) audio.src = data.src;
+    player.hidden = false;
+    document.body.classList.add("player-open");
+  }
+  function go(t) {
+    open();
+    var set = function () { try { audio.currentTime = t; } catch (e) {} };
+    if (audio.readyState >= 1) set(); else audio.addEventListener("loadedmetadata", set, { once: true });
+    var p = audio.play(); if (p && p.catch) p.catch(function () {});
+  }
+  function current() { return at(audio.currentTime || 0); }
+  function playing() { return !audio.paused && !audio.ended; }
+  function started() { return !!audio.getAttribute("src"); }
+
+  function playChapter(id) {
+    var i = idxOf(id);
+    if (stopAt !== null && started() && current() === i && audio.currentTime < ch[i].end - 0.5) {
+      if (playing()) audio.pause(); else audio.play();
+      return;
+    }
+    stopAt = ch[i].end;
+    go(ch[i].start);
+  }
+  all.addEventListener("click", function () {
+    if (started() && stopAt === null && playing()) { audio.pause(); return; }
+    var resume = started() && stopAt === null && audio.currentTime > 1 && audio.currentTime < data.duration - 2;
+    stopAt = null;
+    go(resume ? audio.currentTime : 0);
+  });
+  toggle.addEventListener("click", function () {
+    if (playing()) { audio.pause(); return; }
+    var t = audio.currentTime || 0;
+    if (stopAt !== null && t >= stopAt - 0.5) stopAt = null;  // finished the chapter: carry on into the next
+    go(t);
+  });
+  $("pl-prev").addEventListener("click", function () {
+    var i = current(), j = audio.currentTime - ch[i].start > 3 ? i : Math.max(0, i - 1);
+    if (stopAt !== null) stopAt = ch[j].end;
+    go(ch[j].start);
+  });
+  $("pl-next").addEventListener("click", function () {
+    var j = Math.min(ch.length - 1, current() + 1);
+    if (stopAt !== null) stopAt = ch[j].end;
+    go(ch[j].start);
+  });
+  $("pl-close").addEventListener("click", function () {
+    audio.pause(); player.hidden = true; document.body.classList.remove("player-open");
+  });
+  seek.addEventListener("input", function () {
+    scrubbing = true;
+    time.textContent = fmt(seek.value / 1000 * data.duration) + " / " + fmt(data.duration);
+  });
+  seek.addEventListener("change", function () {
+    scrubbing = false; stopAt = null;
+    go(seek.value / 1000 * data.duration);
+  });
+
+  var lastTitle = -1;
+  function render() {
+    var t = audio.currentTime || 0, i = at(t), on = playing();
+    title.textContent = ch[i].title;
+    var sub = document.createElement("span");
+    sub.textContent = stopAt !== null ? "this chapter" : "chapter " + (i + 1) + " of " + ch.length;
+    title.appendChild(sub);
+    if (!scrubbing) {
+      seek.value = Math.round(t / data.duration * 1000);
+      time.textContent = fmt(t) + " / " + fmt(data.duration);
+    }
+    toggle.classList.toggle("is-playing", on);
+    toggle.setAttribute("aria-label", on ? "Pause" : "Play");
+    var episode = stopAt === null && started();
+    all.classList.toggle("is-playing", on && episode);
+    all.querySelector(".lbl").textContent = on && episode ? "Pause the episode"
+      : (episode && t > 1 && t < data.duration - 2 ? "Resume the episode" : "Listen to the episode");
+    document.querySelectorAll(".listen[data-ch]").forEach(function (b) {
+      var mine = stopAt !== null && on && ch[i].id === b.dataset.ch;
+      b.classList.toggle("is-playing", mine);
+      b.querySelector(".lbl").textContent = mine ? "Pause" : b.dataset.label;
+    });
+    if (i !== lastTitle && "mediaSession" in navigator && window.MediaMetadata) {
+      lastTitle = i;
+      try {
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title: ch[i].title, artist: "Forever Class Codex", album: "Forever Class Codex",
+          artwork: [{ src: "og.png", sizes: "1200x630", type: "image/png" }]
+        });
+      } catch (e) {}
+    }
+  }
+  audio.addEventListener("timeupdate", function () {
+    if (stopAt !== null && audio.currentTime >= stopAt - 0.15) audio.pause();
+    render();
+  });
+  ["play", "pause", "ended", "loadedmetadata", "seeked"].forEach(function (ev) { audio.addEventListener(ev, render); });
+
+  if ("mediaSession" in navigator) {
+    var h = function (a, f) { try { navigator.mediaSession.setActionHandler(a, f); } catch (e) {} };
+    h("play", function () { toggle.click(); });
+    h("pause", function () { audio.pause(); });
+    h("previoustrack", function () { $("pl-prev").click(); });
+    h("nexttrack", function () { $("pl-next").click(); });
+    h("seekto", function (d) { stopAt = null; go(d.seekTime); });
   }
 })();
 </script>

@@ -1,1 +1,2 @@
-podcast/*.mp3
+podcast/samples/
+__pycache__/
